@@ -83,21 +83,46 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait);
 
 ### Keep folder tidy
-print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
+print 
 mkdir "tmp", 0755;
-my $final_out_file = $file."gff3";
+my $final_tmp_file = "concat_tmp_maker_output.gff3";
 for (my $i=0; $i < scalar @results_files; $i++) {
 	system("cat $results_files[$i] >> $final_out_file");	
 	system("mv $results_files[$i] ./tmp"); system("mv $files[$i] ./tmp");
 }
 for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
+
+print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
+print "+ Fixing gene ids generated\n";
+my $final_file = "concat_maker_output_fixed.gff3";
+open (FIN, ">$final_file");
+my $gene_counter = 0;
+my $id;
+open (GFF, "<$file");
+while (<GFF>) {
+	if ($_ =~ /^\#/) {print FIN $_; next;}
+	if ($_ =~ /^\s+/) {print FIN $_; next;} 
+	chomp;
+	my @array = split("\t", $_);
+	if ($array[-1] =~ /ID\=(g\d+)$/) {
+		$id = $1; $gene_counter++;
+	}
+	my $new = "g".$gene_counter;
+	for (my $i = 0; $i < $#array; $i++) {
+		print FIN $array[$i]."\t";
+	}
+	my $id_line = $array[-1];
+	$id_line =~ s/$id/$new/g;
+	#print "OLD: ".$_."\n";
+	print FIN $id_line."\n";	
+}
+close (GFF); close (FIN)
 print "Finishing annotation...\n";
 print "Check for temporal files in tmp folder generated, for final results in $final_out_file and for putative errors in augustus_x.eXXXXX files...\n";
 
 print "##################################################\n";
 print "\tAugustus annotation pipeline finished...\n";
 print "##################################################\n";
-
 
 
 sub print_help {
