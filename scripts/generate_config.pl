@@ -12,12 +12,12 @@ print "########################################################################\
 
 my $config_file = "config.txt";
 open (OUT, ">$config_file");
-print OUT "BUSCO\t.\n ## /path/to/BUSCO_scripts/run_busco.py";
-print OUT "AUGUSTUS\t.\n ## /path/to/augustus";
-print OUT "INTERPRO\t.\n## /path/to/interproscan.sh";
-print OUT "MAKER\t.\n## /path/to/maker_bin_folder/";
-print OUT "RepeatMasker\t.\n## /path/to/RepeatMasker";
-print OUT "RepeatModeler\t.\n## /path/to/RepeatModeler";
-print OUT "GRID_QUEUE\t.\n## qsub -q xxx -pe yyyy";
-print OUT "contig_stats\t.\n## /path/to/perl_script/contig_stats.pl";
+print OUT "BUSCO\t.	## /path/to/BUSCO_scripts/run_busco.py\n";
+print OUT "AUGUSTUS\t.	## /path/to/augustus\n";
+print OUT "INTERPRO\t.	## /path/to/interproscan.sh\n";
+print OUT "MAKER\t.	## /path/to/maker_bin_folder/\n";
+print OUT "RepeatMasker\t.	## /path/to/RepeatMasker\n";
+print OUT "RepeatModeler\t.	## /path/to/RepeatModeler\n";
+print OUT "GRID_QUEUE\t.	## qsub -q xxx -pe yyyy\n";
+print OUT "contig_stats\t.	## /path/to/perl_script/contig_stats.pl\n";
 close(OUT);
