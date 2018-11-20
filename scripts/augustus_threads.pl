@@ -61,7 +61,7 @@ print "+ Sending commands:\n";
 my $file_OUT = "augustus_threads_commands_sent.txt";
 print "Printing commands into $file_OUT\n";
 open (OUT, ">$file_OUT");
-my @ids2wait; my @results_files; my @discard_files;
+my @ids2wait; my @results_files; my @discard_files; my @error_files;
 for (my $i=0; $i < scalar @files; $i++) {
 	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
@@ -74,8 +74,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $out_po = "augustus_".$i.".po".$call_id;
 	my $out_pe = "augustus_".$i.".pe".$call_id;
 	push (@discard_files, $out_po);	push (@discard_files, $out_pe);	
-	push (@results_files, $out);
-	## push	$out_e??
+	push (@results_files, $out); push (@error_files, $out_e);
 }
 close (OUT);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -85,20 +84,22 @@ myModules::waiting(\@ids2wait);
 ### Keep folder tidy
 print 
 mkdir "tmp", 0755;
+my $error_log = "error.log";
 my $final_tmp_file = "concat_tmp_maker_output.gff3";
 for (my $i=0; $i < scalar @results_files; $i++) {
-	system("cat $results_files[$i] >> $final_out_file");	
+	system("cat $results_files[$i] >> $final_tmp_file");	
 	system("mv $results_files[$i] ./tmp"); system("mv $files[$i] ./tmp");
+	system("cat $error_files[$i] >> $error_log"); system("mv $error_files[$i] ./tmp"); 
 }
 for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
+system("mv info_*txt ./tmp");
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Fixing gene ids generated\n";
 my $final_file = "concat_maker_output_fixed.gff3";
 open (FIN, ">$final_file");
-my $gene_counter = 0;
-my $id;
-open (GFF, "<$file");
+my $gene_counter = 0; my $id;
+open (GFF, "<$final_tmp_file");
 while (<GFF>) {
 	if ($_ =~ /^\#/) {print FIN $_; next;}
 	if ($_ =~ /^\s+/) {print FIN $_; next;} 
@@ -116,9 +117,9 @@ while (<GFF>) {
 	#print "OLD: ".$_."\n";
 	print FIN $id_line."\n";	
 }
-close (GFF); close (FIN)
+close (GFF); close (FIN);
 print "Finishing annotation...\n";
-print "Check for temporal files in tmp folder generated, for final results in $final_out_file and for putative errors in augustus_x.eXXXXX files...\n";
+print "Check for temporal files in tmp folder generated, for final results in $final_file and for putative errors in error.log files...\n";
 
 print "##################################################\n";
 print "\tAugustus annotation pipeline finished...\n";
