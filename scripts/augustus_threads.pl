@@ -55,7 +55,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 my $additional ="";
 if ($hints_file) { $additional = " --hintsfile=$hints_file";}
-if (!$augustus_species) {$augustus_species="fly"}
+if (!$augustus_species) {$augustus_species= "fly"}
 
 print "+ Sending commands:\n";
 my $file_OUT = "augustus_threads_commands_sent.txt";
@@ -65,7 +65,8 @@ my @ids2wait; my @results_files; my @discard_files;
 for (my $i=0; $i < scalar @files; $i++) {
 	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-	my $augustus_call = "$hercules_queue 1 -N augustus_$i -b y $augustus_path --gff3=on".$additional." --species=$augustus_species $files[$i]";
+	my $augustus_call = "$hercules_queue 1 -cwd -V -N augustus_$i -b y $augustus_path --gff3=on".$additional." --species=$augustus_species $files[$i]";
+	print OUT $augustus_call."\n";
 	my $call_id = myModules::sending_command($augustus_call);
 	push (@ids2wait, $call_id);
 	my $out = "augustus_".$i.".o".$call_id;
