@@ -53,18 +53,18 @@ my @files = @{$files_ref};
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
+my $additional ="";
+if ($hints_file) { $additional = " --hintsfile=$hints_file";}
+if (!$augustus_species) {$augustus_species="fly"}
+
 print "+ Sending commands:\n";
 my $file_OUT = "augustus_threads_commands_sent.txt";
 print "Printing commands into $file_OUT\n";
 open (OUT, ">$file_OUT");
 my @ids2wait; my @results_files; my @discard_files;
 for (my $i=0; $i < scalar @files; $i++) {
-	my $additional;
-	if ($hints_file) { $additional = " --hintsfile=$hints_file";}
-
 	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-	
 	my $augustus_call = "$hercules_queue 1 -N augustus_$i -b y $augustus_path --gff3=on".$additional." --species=$augustus_species $files[$i]";
 	my $call_id = myModules::sending_command($augustus_call);
 	push (@ids2wait, $call_id);
@@ -72,7 +72,6 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $out_e = "augustus_".$i.".e".$call_id;
 	my $out_po = "augustus_".$i.".po".$call_id;
 	my $out_pe = "augustus_".$i.".pe".$call_id;
-	
 	push (@discard_files, $out_po);	push (@discard_files, $out_pe);	
 	push (@results_files, $out);
 	## push	$out_e??
@@ -104,7 +103,7 @@ sub print_help {
 	print "\n################################################\n";
 	print "\tAUGUSTUS call for multiple threads\n";
 	print "################################################\n";
-	print "USAGE:\nperl $0\n\t-file fasta_file\n\t-cpus int\n\t-config config_file\n\t[-hints hints_file -sp augustus_species] [-h|--help]\n\n";
+	print "USAGE:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config config_file\n\t[-hints hints_file -sp augustus_species] [-h|--help]\n\n";
 	print "This script splits fasta in as many cpus as stated and sends via Grid Engine augustus commands using the queue(s) provided...\n";	
 	print "\n\n";
 }

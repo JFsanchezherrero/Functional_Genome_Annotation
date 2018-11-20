@@ -10,7 +10,7 @@ require myModules;
 my ($file, $config_file, $nCPUs, $help, @busco_db, $augustus_species);
 GetOptions( 
 	"genome=s" => \$file,
-	"cpus=i" => \$nCPUs,
+	"cpu=i" => \$nCPUs,
 	"h|help" => \$help,
 	"busco_db=s" => \@busco_db,
 	"config=s" => \$config_file,
@@ -81,6 +81,6 @@ sub print_help {
     print "\n######################################################################################\n";
    	print "\tAssembly statistics call for file provided\n";
     print "######################################################################################\n";
-    print "USAGE: perl $0\n\t-genome fasta\n\t-cpus int\n\t-config config_file\n\t-busco_db /path/to/BUSCO_db1\n\t-busco_db /path/to/BUSCO_db2\n\t[-sp augustus_species_model] [-h|--help]\n\n";    
+    print "USAGE: perl $0\n\t-genome fasta\n\t-cpu int\n\t-config config_file\n\t-busco_db /path/to/BUSCO_db1\n\t-busco_db /path/to/BUSCO_db2\n\t[-sp augustus_species_model] [-h|--help]\n\n";    
     print "\nThis scripts calls multiple scripts and generates statistics for the given fasta file \n\n";
 }

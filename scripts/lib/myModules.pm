@@ -59,10 +59,11 @@ sub fasta_file_splitter {
 
 	open (FH, "<$file") or die "Could not open source file. $!";
 	print "\t- Splitting file into blocks of $block characters aprox ...\n";
+	my @file_name = split("/", $file);
 	my $j = 0; my @files;
 	while (1) {
 		my $chunk;
-	   	my @tmp = split ("\.".$ext, $file);
+	   	my @tmp = split ("\.".$ext, $file_name[-1]);
 		my $block_file = $tmp[0]."_part-".$j."_tmp.".$ext;
 		push (@files, $block_file);
 		open(OUT, ">$block_file") or die "Could not open destination file";

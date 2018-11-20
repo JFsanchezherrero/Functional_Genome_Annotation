@@ -111,7 +111,7 @@ system($command_fasta_merge);
 
 sub print_help {
 	print "\n################################################\n";
-	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpus int\n\t-config -file";
+	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config -file";
 	print "\n################################################\n";
 	print "This script splits fasta in as many chunks (cpu/2) as stated and sends Maker Annotation Pipeline using several queues...\n\n";
 	print "Maker control files must be set in the folder where the command is sent. Use 2 CPUs.\n\n\n";

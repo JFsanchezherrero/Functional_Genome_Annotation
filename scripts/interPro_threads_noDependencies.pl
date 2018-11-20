@@ -84,7 +84,7 @@ sub print_help {
 	print "\n################################################\n";
 	print "\tINTERPRO call for multiple threads\n";
 	print "################################################\n";
-	print "USAGE:\nperl $0\n\t-file fasta_file\n\t-cpus int\n\t-config -file\n\n";
+	print "USAGE:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config -file\n\n";
 	print "This script splits fasta in as many chunks as stated (cpus/4) and sends InterPro into hercules queue(s) provided...\n\n";
 	print "Each process will be using:\n\t4 CPUs,\n\t-pa -dp -goterms\n\t-appl TIGRFAM,SFLD,SUPERFAMILY,PANTHER,Gene3D,Hamap,Coils,ProSiteProfiles,SMART,PRINTS,ProSitePatterns,Pfam,ProDom,MobiDBLite,PIRSF\n\n";
 	print "\n################################################\n";
