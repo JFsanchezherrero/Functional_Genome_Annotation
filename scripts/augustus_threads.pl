@@ -62,7 +62,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $additional;
 	if ($hints_file) { $additional = " --hintsfile=$hints_file";}
 
-	my $augustus_path = $configuration{"AUGUSTUS"}[0];
+	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
 	
 	my $augustus_call = "$hercules_queue 1 -N augustus_$i -b y $augustus_path --gff3=on".$additional." --species=$augustus_species $files[$i]";

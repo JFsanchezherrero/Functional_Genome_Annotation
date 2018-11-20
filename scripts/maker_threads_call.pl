@@ -70,7 +70,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $grid_engine_queue;
 
 	print "Sending command for: $files[$i]\n";
-	my $command = $hercules_queue." ".$maker_path."/maker -g ".$files[$i]." -b annotation";
+	my $command = $hercules_queue." ".$maker_path."/bin/maker -g ".$files[$i]." -b annotation";
 	print OUT $command."\n";	
 
 	my $call_id = myModules::sending_command($command);
@@ -94,19 +94,19 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 ## -dsindex and finish
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "DSINDEX command:\n";
-my $command = $maker_path."/maker -b annotation -g $file -dsindex";
+my $command = $maker_path."/bin/maker -b annotation -g $file -dsindex";
 system($command);
 
 ##merge
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "gff3 merge command:\n";
-my $command_merge = $maker_path."/gff3_merge -d ./annotation.maker.output/annotation_master_datastore_index.log";
+my $command_merge = $maker_path."/bin/gff3_merge -d ./annotation.maker.output/annotation_master_datastore_index.log";
 system($command_merge);
 
 ## get proteins merge
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "fasta merge command:\n";
-my $command_fasta_merge = $maker_path."/fasta_merge -d ./annotation.maker.output/annotation_master_datastore_index.log";
+my $command_fasta_merge = $maker_path."/bin/fasta_merge -d ./annotation.maker.output/annotation_master_datastore_index.log";
 system($command_fasta_merge);
 
 sub print_help {
