@@ -56,7 +56,7 @@ print "+ Generate a database for the given genome\n";
 ## Create RepeatModeler Database
 my @ids2wait;
 my $buildDatabase_command = "$hercules_queue 1 -cwd -V -N buildDB -b y $repeatmodeler_database -name myGenomeDB -engine ncbi $file";
-print "Command: $buildDatabase_command\n";
+#print "Command: $buildDatabase_command\n";
 my $call_id = myModules::sending_command($buildDatabase_command);
 push (@ids2wait, $call_id);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -67,7 +67,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Classify repeats for the given genome\n";
 my $repeatmodeler_Search = $configuration{"RepeatModeler"}[0]."RepeatModeler";
 my $repeatLib_command = "$hercules_queue $cpus -cwd -V -N repeatmodeler_Search -b y $repeatmodeler_Search -database myGenomeDB -pa $cpus -engine ncbi $file";
-print "Command: $repeatLib_command\n";
+#print "Command: $repeatLib_command\n";
 $call_id = myModules::sending_command($repeatLib_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
@@ -75,8 +75,7 @@ print "\n";
 
 #### RepeatMasker
 chdir ".."; my @files_dir = @{ myModules::read_dir("./RepeatModeler") };
-my $dir3 = "RepeatMasker";
-mkdir $dir3, 0755; chdir $dir3;
+my $dir3 = "RepeatMasker"; mkdir $dir3, 0755; chdir $dir3;
 
 ## Get repeats.lib
 my $repeats_lib;
@@ -89,8 +88,14 @@ for (my $i=0; $i < scalar @files_dir; $i++) {
 ## RepeatMasker Search
 my $repeatmasker_Search = $configuration{"RepeatMasker"}[0]."RepeatMasker";
 my $repeatMasker_command = "$hercules_queue $cpus -cwd -V -N repeatmasker_Search -b y $repeatmasker_Search -x -e ncbi -pa $cpus -lib repeats.lib -gff $file";
+print "Repeat Classification obtained: $repeats_lib\n";
 
-unless (-e -r -s $repeats_lib) {
+if (-e -r -s $repeats_lib) {
+	print "Copying $repeats_lib into repats.lib file\n";
+	system("cp $repeats_lib repeats.lib");
+
+} else {
+
 	print "\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 	print "\nERROR: Either RepeatLib command or RepeatModeler database failed. Re-run commands:\n";
 	print $buildDatabase_command."\n";
@@ -98,14 +103,11 @@ unless (-e -r -s $repeats_lib) {
 	print "\nAnd look for consensi.fa.classified file within the RM_* folder generated and run RepeatMasker where repeats.lib is consensi.fa.classified\n";
 	print $repeatMasker_command."\n";	
 	exit();
-} else {
-	print "Copying $repeats_lib into repats.lib file\n";
-	system("cp $repeats_lib repeats.lib");
 }
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Identify and mask repeats for the genome\n";
-print "Command: $repeatMasker_command\n";
+#print "Command: $repeatMasker_command\n";
 $call_id = myModules::sending_command($repeatMasker_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
@@ -131,9 +133,9 @@ system("cat $tbl_file");
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Convert GFF file generated into GFF3 compatible file\n";
 my $rmOutToGFF3 = $configuration{"rmOutToGFF3"}[0];
-my $repeatLib_command = "$hercules_queue $cpus -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $file";
-print "Command: $repeatLib_command\n";
-$call_id = myModules::sending_command($repeatLib_command); $ids2wait[0] = $call_id;
+my $rmOutToGFF3_command = "$hercules_queue $cpus -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $file";
+#print "Command: $rmOutToGFF3_command\n";
+$call_id = myModules::sending_command($$rmOutToGFF3_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
 print "\n";

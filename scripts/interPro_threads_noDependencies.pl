@@ -87,6 +87,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 close (OUT);
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
+print "\n";
 
 ### Keep folder tidy
 print 
