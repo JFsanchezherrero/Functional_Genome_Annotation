@@ -200,6 +200,14 @@ sub get_number_lines {
 	return $n;
 }
 
+sub read_dir {
+	my $dir = $_[0];
+	opendir(DIR, $dir);
+	my @dir_files = readdir(DIR);
+	my $array_ref = \@dir_files;
+	return $array_ref;
+}
+
 sub get_config_file {
 	my $file = $_[0];
 	

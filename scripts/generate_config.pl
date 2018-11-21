@@ -41,7 +41,8 @@ if ($ARGV[0]) {
 	print "RepeatMasker (/path/to/RepeatMasker_folder/):\t"; my $RepeatMasker = <STDIN>; chomp $RepeatMasker; push ( @{ $configuration{"RepeatMasker"} } , $RepeatMasker );
 	print "RepeatModeler (/path/to/RepeatModeler_folder/):\t"; my $RepeatModeler = <STDIN>; chomp $RepeatModeler; push ( @{ $configuration{"RepeatModeler"} } , $RepeatModeler );
 	print "contig_stats (/path/to/perl_script/contig_stats.pl):\t"; my $contig_stats = <STDIN>; chomp $contig_stats; push ( @{ $configuration{"contig_stats"} } , $contig_stats );
-
+	print "rmOutToGFF3 (/path/to/perl_script/rmOutToGFF3.pl):\t"; my $rmOutToGFF3 = <STDIN>; chomp $rmOutToGFF3; push ( @{ $configuration{"rmOutToGFF3"} } , $rmOutToGFF3 );
+	
 	print "GRID_QUEUE (qsub -q xxx -pe yyyy):\t"; my $GRID_QUEUE = <STDIN>; chomp $GRID_QUEUE; push ( @{ $configuration{"GRID_QUEUE"} } , $GRID_QUEUE );
 	print "\nAnythin else?\n";
 	while (1) {
@@ -77,6 +78,7 @@ print OUT "MAKER\t".$configuration{"MAKER"}[0]."\n";
 print OUT "RepeatMasker\t".$configuration{"RepeatMasker"}[0]."\n";
 print OUT "RepeatModeler\t".$configuration{"RepeatModeler"}[0]."\n";
 print OUT "contig_stats\t".$configuration{"contig_stats"}[0]."\n";
+print OUT "rmOutToGFF3\t".$configuration{"rmOutToGFF3"}[0]."\n";
 my @array = @{ $configuration{"GRID_QUEUE"} }; 
 for (my $i=0; $i < scalar @array; $i++) {
 	print OUT "GRID_QUEUE\t".$array[$i]."\n";
@@ -88,35 +90,9 @@ print "+ Generate environment file and export for availability\n";
 my $env = "environment.sh";
 open (ENV, ">$env");
 print ENV "PATH=\$PATH:".$configuration{"AUGUSTUS"}[0]."bin:".$configuration{"AUGUSTUS"}[0]."scripts:".$configuration{"RepeatMasker"}[0].":".$configuration{"RepeatModeler"}[0].":".$configuration{"MAKER"}[0]."bin:\n";
-print ENV "PERL5LIB=\${PERL5LIB}::".$configuration{"RepeatMasker"}[0]."rmOutToGFF3:".$configuration{"MAKER"}[0]."/lib:".$configuration{"MAKER"}[0]."perl/lib\n";
+print ENV "PERL5LIB=\${PERL5LIB}::".$configuration{"MAKER"}[0]."/lib:".$configuration{"MAKER"}[0]."perl/lib\n";
 print ENV "AUGUSTUS_CONFIG_PATH=".$configuration{"AUGUSTUS"}[0]."config\n";
 close (ENV);
 sleep(1);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
-
-
-
-
-
-__END__
-export PATH=$PATH:/users/jfsanchez/JFSH_software/AUGUSTUS/augustus-3.1/bin
-export PATH=$PATH:/users/jfsanchez/JFSH_software/AUGUSTUS/augustus-3.1/scripts
-export PATH=$PATH:/users/jfsanchez/JFSH_software/RepeatSearch/RepeatMasker/RepeatMasker/
-export PATH=$PATH:/users/jfsanchez/JFSH_software/RepeatSearch/RepeatModeler/RepeatModeler-open-1.0.10
-export PATH=$PATH:/users/jfsanchez/JFSH_software/ANNOTATION/maker/bin/
-
-export AUGUSTUS_CONFIG_PATH=/users/jfsanchez/JFSH_software/AUGUSTUS/augustus-3.1/config/
-
-
-PERL5LIB=${PERL5LIB}:/users/jfsanchez/JFSH_software/RepeatSearch/RepeatMasker/rmOutToGFF3/
-PERL5LIB=${PERL5LIB}:/users/jfsanchez/JFSH_software/ANNOTATION/maker/lib/
-PERL5LIB=${PERL5LIB}:/users/jfsanchez/JFSH_software/ANNOTATION/maker/perl/lib
-
-
-
-
-
-
-
-
 

@@ -70,6 +70,7 @@ for (my $i=0; $i < scalar @busco_db; $i++) {
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
+print "\n";
 print "Retrieve results and generate statistics\n";
 print "Exit....\n";
 

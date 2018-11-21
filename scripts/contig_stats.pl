@@ -11,7 +11,11 @@ my $fasta = $ARGV[0];
 my $parts = $ARGV[1];
 
 if (!$fasta) { 
-	print "\nUsage: please provide a single fasta file for Contig Statistics...\n\tperl $0 fasta_file\n\n";
+	print "\n################################################\n";
+	print "\tAssembly Statistics \n";
+	print "################################################\n";
+
+	print "\nUSAGE:\nperl $0 fasta_file [parts]\n\n";
 	print "Notes:\n- Sequences < 150pb would discarded for the statistics...\n";
 	print "- Default splitting sets: 150, 500, 1000, 5000, 10000\n";
 	print "- Provide new parts using a csv argument for the script\n\tperl $0 fasta_file 500,3000,5000,10000\n\n";
@@ -247,14 +251,6 @@ sub get_stats {
 	printf "%-25s %0.2f\n", "L50: ", $L50;
 	my $string = $totalContigs.",".$percentage_contigs_returned.",".$bases.",".$percentage_pb_bases_this_set_print.",".$minReadLen.",".$maxReadLen.",".$avgReadLen.",".$medianLen.",".$n50.",".$L50;
 	return $string;
-}
-
-sub read_dir {
-	my $dir = $_[0];
-	opendir(DIR, $dir);
-	my @dir_files = readdir(DIR);
-	my $array_ref = \@dir_files;
-	return $array_ref;
 }
 
 sub printHeader {

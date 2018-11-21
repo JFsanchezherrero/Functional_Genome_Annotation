@@ -96,6 +96,9 @@ for (my $i=0; $i < scalar @files; $i++) {
 	push (@results_files, $out); push (@error_files, $out_e);
 }
 close (OUT);
+## waiting to finish all 
+myModules::waiting(\@ids2wait);
+print "\n";
 
 ### Keep folder tidy
 print 
@@ -109,11 +112,7 @@ for (my $i=0; $i < scalar @results_files; $i++) {
 }
 for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
 system("mv info_*txt ./tmp");
-
-## waiting to finish all 
-myModules::waiting(\@ids2wait);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
-#for (my $i=0; $i < scalar @results_files; $i++) { system("rm $files[$i]"); }
 
 ## -dsindex and finish
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -140,7 +139,6 @@ sub print_help {
 	print "This script splits fasta in as many chunks (cpu/2) as stated and sends Maker Annotation Pipeline using several queues...\n\n";
 	print "Maker control files must be set in the folder where the command is sent. Use 2 CPUs.\n\n\n";
 	print "################################################\n";
-	exit();	
 }
 
 
