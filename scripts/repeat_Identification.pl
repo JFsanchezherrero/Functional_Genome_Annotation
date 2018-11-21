@@ -135,9 +135,9 @@ system("cat $tbl_file");
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Convert GFF file generated into GFF3 compatible file\n";
 my $rmOutToGFF3 = $configuration{"rmOutToGFF3"}[0];
-my $rmOutToGFF3_command = "$hercules_queue $cpus -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $output_file";
+my $rmOutToGFF3_command = "$hercules_queue 1 -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $output_file";
 #print "Command: $rmOutToGFF3_command\n";
-$call_id = myModules::sending_command($$rmOutToGFF3_command); $ids2wait[0] = $call_id;
+$call_id = myModules::sending_command($rmOutToGFF3_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
 print "\n";
