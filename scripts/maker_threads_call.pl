@@ -57,7 +57,9 @@ print "Printing commands into $file_OUT\n";
 
 my $maker_path = $configuration{"MAKER"}[0];
 open (OUT, ">$file_OUT");
-my @ids2wait; my @files = @{$files_ref};
+
+my (@ids2wait, @results_files, @discard_files, @error_files);
+my @files = @{$files_ref};
 for (my $i=0; $i < scalar @files; $i++) {
 	
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
@@ -84,8 +86,30 @@ for (my $i=0; $i < scalar @files; $i++) {
         print OUT "sleep 40\n";
 		sleep(10);
 	}
+	
+	## get files generated
+	my $out = "maker_".$i.".o".$call_id;
+	my $out_e = "maker_".$i.".e".$call_id;
+	my $out_po = "maker_".$i.".po".$call_id;
+	my $out_pe = "maker_".$i.".pe".$call_id;
+	push (@discard_files, $out_po);	push (@discard_files, $out_pe);	
+	push (@results_files, $out); push (@error_files, $out_e);
 }
 close (OUT);
+
+### Keep folder tidy
+print 
+mkdir "tmp", 0755;
+my $error_log = "error.log";
+#my $final_tmp_file = "concat_tmp_maker_output.gff3";
+for (my $i=0; $i < scalar @results_files; $i++) {
+	#system("cat $results_files[$i] >> $final_tmp_file");	
+	system("mv $results_files[$i] ./tmp"); system("mv $files[$i] ./tmp");
+	system("cat $error_files[$i] >> $error_log"); system("mv $error_files[$i] ./tmp"); 
+}
+for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
+system("mv info_*txt ./tmp");
+
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";

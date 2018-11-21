@@ -61,7 +61,7 @@ print "+ Sending commands:\n";
 my $file_OUT = "augustus_threads_commands_sent.txt";
 print "Printing commands into $file_OUT\n";
 open (OUT, ">$file_OUT");
-my @ids2wait; my @results_files; my @discard_files; my @error_files;
+my (@ids2wait, @results_files, @discard_files, @error_files);
 for (my $i=0; $i < scalar @files; $i++) {
 	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
@@ -69,12 +69,15 @@ for (my $i=0; $i < scalar @files; $i++) {
 	print OUT $augustus_call."\n";
 	my $call_id = myModules::sending_command($augustus_call);
 	push (@ids2wait, $call_id);
+
+	## get files generated
 	my $out = "augustus_".$i.".o".$call_id;
 	my $out_e = "augustus_".$i.".e".$call_id;
 	my $out_po = "augustus_".$i.".po".$call_id;
 	my $out_pe = "augustus_".$i.".pe".$call_id;
 	push (@discard_files, $out_po);	push (@discard_files, $out_pe);	
 	push (@results_files, $out); push (@error_files, $out_e);
+
 }
 close (OUT);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";

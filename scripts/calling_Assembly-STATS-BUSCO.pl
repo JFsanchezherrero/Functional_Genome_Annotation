@@ -59,7 +59,7 @@ for (my $i=0; $i < scalar @busco_db; $i++) {
 	my $name = "command_".$name_db."_buscoDB.sh";
 		open (OUT, ">$name");
 		print OUT "#! /bin/bash -x\n#\$ -cwd\n#\$ -V\n";
-		print OUT " --blast_single_core --in $file --mode genome --out $name_db -l $busco_db[$i] -c $cpus2use -sp $augustus_species\n";
+		print OUT "$busco_bin --blast_single_core --in $file --mode genome --out $name_db -l $busco_db[$i] -c $cpus2use -sp $augustus_species\n";
 		close OUT;
 	
 	my $call_name = "BUSCO_".$name_db;
