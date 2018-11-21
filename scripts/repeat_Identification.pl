@@ -43,6 +43,8 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "Make dir and change to ./repeat_annotation\n";
 my $dir = "repeat_annotation";
 mkdir $dir, 0755; chdir $dir;
+system("ln -s $file");
+my @file_name = split("/", $file);
 
 my $dir2 = "RepeatModeler";
 mkdir $dir2, 0755; chdir $dir2;
@@ -55,7 +57,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Generate a database for the given genome\n";
 ## Create RepeatModeler Database
 my @ids2wait;
-my $buildDatabase_command = "$hercules_queue 1 -cwd -V -N buildDB -b y $repeatmodeler_database -name myGenomeDB -engine ncbi $file";
+my $buildDatabase_command = "$hercules_queue 1 -cwd -V -N buildDB -b y $repeatmodeler_database -name myGenomeDB -engine ncbi ../$file_name[-1]";
 #print "Command: $buildDatabase_command\n";
 my $call_id = myModules::sending_command($buildDatabase_command);
 push (@ids2wait, $call_id);
@@ -66,7 +68,7 @@ myModules::waiting(\@ids2wait); ## waiting to finish all
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Classify repeats for the given genome\n";
 my $repeatmodeler_Search = $configuration{"RepeatModeler"}[0]."RepeatModeler";
-my $repeatLib_command = "$hercules_queue $cpus -cwd -V -N repeatmodeler_Search -b y $repeatmodeler_Search -database myGenomeDB -pa $cpus -engine ncbi $file";
+my $repeatLib_command = "$hercules_queue $cpus -cwd -V -N repeatmodeler_Search -b y $repeatmodeler_Search -database myGenomeDB -pa $cpus -engine ncbi ../$file_name[-1]";
 #print "Command: $repeatLib_command\n";
 $call_id = myModules::sending_command($repeatLib_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -87,7 +89,7 @@ for (my $i=0; $i < scalar @files_dir; $i++) {
 
 ## RepeatMasker Search
 my $repeatmasker_Search = $configuration{"RepeatMasker"}[0]."RepeatMasker";
-my $repeatMasker_command = "$hercules_queue $cpus -cwd -V -N repeatmasker_Search -b y $repeatmasker_Search -x -e ncbi -pa $cpus -lib repeats.lib -gff $file";
+my $repeatMasker_command = "$hercules_queue $cpus -cwd -V -N repeatmasker_Search -b y $repeatmasker_Search -x -e ncbi -pa $cpus -lib repeats.lib -gff ../$file_name[-1]";
 print "Repeat Classification obtained: $repeats_lib\n";
 
 if (-e -r -s $repeats_lib) {
@@ -113,7 +115,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
 print "\n";
 
-
+chdir "..";
 #######
 my @files_dir2 = @{ myModules::read_dir(".") };
 ## Get repeats.lib
@@ -133,7 +135,7 @@ system("cat $tbl_file");
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Convert GFF file generated into GFF3 compatible file\n";
 my $rmOutToGFF3 = $configuration{"rmOutToGFF3"}[0];
-my $rmOutToGFF3_command = "$hercules_queue $cpus -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $file";
+my $rmOutToGFF3_command = "$hercules_queue $cpus -cwd -V -N rmOutToGFF3 -b y perl $rmOutToGFF3 -database myGenomeDB -pa $cpus -engine ncbi $output_file";
 #print "Command: $rmOutToGFF3_command\n";
 $call_id = myModules::sending_command($$rmOutToGFF3_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
