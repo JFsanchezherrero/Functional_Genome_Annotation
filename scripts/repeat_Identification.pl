@@ -81,7 +81,7 @@ my $dir3 = "RepeatMasker"; mkdir $dir3, 0755; chdir $dir3;
 my $repeats_lib;
 for (my $i=0; $i < scalar @files_dir; $i++) {
 	if ($files_dir[$i] =~ /^RM_/) {
-		$repeats_lib = "../RepeatModeler/.".$files_dir[$i]."/consensi.fa.classified";	
+		$repeats_lib = "../RepeatModeler/".$files_dir[$i]."/consensi.fa.classified";	
 	}
 }
 
