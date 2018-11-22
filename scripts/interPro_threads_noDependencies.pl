@@ -40,7 +40,7 @@ print "Make dir and change to ./interpro_annotation\n";
 my $dir = "interpro_annotation";
 mkdir $dir, 0755; chdir $dir;
 
-my $ref_array_count = myModules::get_size($file);
+my $ref_array_count = myModules::get_size("../".$file);
 my $block = int($ref_array_count/$chunks);
 my $files_ref = myModules::fasta_file_splitter($file,$block,"fasta");
 
@@ -64,11 +64,11 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $name = "InterPro".$i;
 
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-	$hercules_queue .= " 4 -N $name -cwd -V -b y ";
+	$hercules_queue .= " 4 -N $name -cwd -V -b y";
 	print "Sending command for: $files[$i]\n";
 	my $interpro = $configuration{"INTERPRO"}[0];
 	
-	my $command = $hercules_queue." $interpro -i ".$files[$i]." -appl TIGRFAM,SFLD,SUPERFAMILY,Gene3D,Hamap,Coils,ProSiteProfiles,SMART,PRINTS,ProSitePatterns,Pfam,ProDom,MobiDBLite,PIRSF -b $name -pa -dp -goterms";
+	my $command = $hercules_queue." $interpro -cpu 4 -i ".$files[$i]." -appl TIGRFAM,SFLD,SUPERFAMILY,Gene3D,Hamap,Coils,ProSiteProfiles,SMART,PRINTS,ProSitePatterns,Pfam,ProDom,MobiDBLite,PIRSF -b $name -pa -dp -goterms";
 	print OUT $command."\n";
 	my $call_id = myModules::sending_command($command);
 	push (@ids2wait, $call_id);

@@ -59,6 +59,8 @@ if ($ARGV[0]) {
 foreach my $keys (keys %configuration) {
 	next if $keys eq "BUSCO"; next if $keys eq "GRID_QUEUE";
 	next if $keys eq "contig_stats"; next if $keys eq "INTERPRO"; 
+	next if $keys eq "rmOutToGFF3";	
+	
 	my @array_files = @{ $configuration{$keys} };
 		for (my $i=0; $i < scalar @array_files; $i++) {
 			next if ($array_files[$i] eq ".");

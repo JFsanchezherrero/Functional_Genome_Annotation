@@ -1,37 +1,61 @@
 # Introduction
 This repository contains files, scripts and examples employed during the Functional Genome Annotation Workshop
 
-# Commands
+# Steps
 ### 0) Configuration file
 
->perl ./Functional_Genome_Annotation/scripts/generate_config.pl [previous configuration file]
->source environment.sh ## For loading environment variables 
+Config path for necessary binaries and GRID Engine queues in order to split jobs and sent multiple threads.
 
 ### 1) Quality Metrics
->perl ./Functional_Genome_Annotation/scripts/calling_Assembly-STATS-BUSCO.pl -genome genome.fasta -cpu $CPUS -config configuration_file.txt -busco_db /path/to/BUSCO_db1 [-busco_db /path/to/BUSCO_db2] [-sp augustus_species]
 
-### 2) Get Tophat junctions
->tophat –p $CPUS genome.fasta RNAseq-reads_R1.fastq RNAseq-reads_R2.fastq
+Calculate assembly statistics (N50, assembly bases, etc) and run BUSCO for the dataset of interest.
 
-Output generated: accepted hits mapping bam file and insertions, junctions and deletions bed file
+### 2) Repeat Identification
 
-Convert into gff3 format file using tophat2gff3 (under maker/bin/)
->tophat2gff3 tophat_output_junctions.bed
+Generate a de novo search and based on RepBase and DFam for the repeat identification using RepeatModeler and RepeatMasker.
 
-## 3) Repeat Identification
+### 3) Get Tophat junctions
+
+Map RNA seq reads using Tophat and with the output generated, junctions bed file (others: accepted hits mapping bam file; insertions, and deletions bed file) generate information for later annotation. Convert junctions bed into gff3 format file using tophat2gff3 (under maker/bin/)
+
+## 4) Generate
+
+
 
 # Bibliography & Sources:
+- Repeats: 
+	http://www.repeatmasker.org/
+	https://www.nature.com/articles/nrg2165
+	https://www.ncbi.nlm.nih.gov/pubmed/18753783
+	
+- Gene Ontology (GO) Terms:
+	http://www.geneontology.org/
+	https://www.nature.com/articles/ng0500_25
 
-## Format Specification:
-
-GFF3: 
-- http://gmod.org/wiki/GFF3
-- https://www.ensembl.org/info/website/upload/gff3.html 
+- Figures:
+	https://en.wikiversity.org/wiki/WikiJournal_of_Medicine/Eukaryotic_and_prokaryotic_gene_structure
+	
+-GFF3: 
+	http://gmod.org/wiki/GFF3
+	https://www.ensembl.org/info/website/upload/gff3.html 
 
 ## Software
-TOPHAT:
-- https://ccb.jhu.edu/software/tophat/index.shtml
+TOPHAT: 
+	https://ccb.jhu.edu/software/tophat/index.shtml
+BUSCO: 
+	https://busco.ezlab.org/
+RepeatMasker: 
+	http://www.repeatmasker.org/RMDownload.html
+RepeatModeler: 
+	http://www.repeatmasker.org/RepeatModeler/
+MAKER:
+AUGUSTUS:
+BRAKER:
+BLAST:
 
 
 ## Others
+
+
+
 
