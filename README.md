@@ -1,5 +1,7 @@
 # Introduction
-This repository contains files, scripts and examples employed during the Functional Genome Annotation Workshop
+This repository contains files, scripts and examples employed during the Functional Genome Annotation Workshop.
+
+Presentation slides will be available soon. 
 
 # Steps
 ### 0) Configuration file
@@ -24,33 +26,51 @@ Map RNA seq reads using Tophat and with the output generated, junctions bed file
 
 # Bibliography & Sources:
 - Repeats: 
+
 	http://www.repeatmasker.org/
-	https://www.nature.com/articles/nrg2165
-	https://www.ncbi.nlm.nih.gov/pubmed/18753783
 	
+	https://www.nature.com/articles/nrg2165
+
+	https://www.ncbi.nlm.nih.gov/pubmed/18753783
+
+
 - Gene Ontology (GO) Terms:
+
 	http://www.geneontology.org/
+	
 	https://www.nature.com/articles/ng0500_25
 
+
 - Figures:
+
 	https://en.wikiversity.org/wiki/WikiJournal_of_Medicine/Eukaryotic_and_prokaryotic_gene_structure
-	
--GFF3: 
+
+
+- GFF3: 
 	http://gmod.org/wiki/GFF3
+	
 	https://www.ensembl.org/info/website/upload/gff3.html 
+
 
 ## Software
 TOPHAT: 
-	https://ccb.jhu.edu/software/tophat/index.shtml
+https://ccb.jhu.edu/software/tophat/index.shtml
+
 BUSCO: 
-	https://busco.ezlab.org/
+https://busco.ezlab.org/
+
 RepeatMasker: 
-	http://www.repeatmasker.org/RMDownload.html
+http://www.repeatmasker.org/RMDownload.html
+
 RepeatModeler: 
-	http://www.repeatmasker.org/RepeatModeler/
+http://www.repeatmasker.org/RepeatModeler/
+
 MAKER:
+
 AUGUSTUS:
+
 BRAKER:
+
 BLAST:
 
 
