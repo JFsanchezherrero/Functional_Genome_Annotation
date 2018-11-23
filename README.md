@@ -47,9 +47,16 @@ Map RNA seq reads using Tophat and with the output generated, junctions bed file
 
 
 - GFF3: 
+	
 	http://gmod.org/wiki/GFF3
 	
 	https://www.ensembl.org/info/website/upload/gff3.html 
+	
+- Annotation
+	
+	https://doi.org/10.1371/journal.pone.0050609
+	https://academic.oup.com/bioinformatics/article/24/5/637/202844
+		
 
 
 ## Software
@@ -67,7 +74,7 @@ http://www.repeatmasker.org/RepeatModeler/
 
 MAKER:
 
-AUGUSTUS:
+AUGUSTUS: http://bioinf.uni-greifswald.de/augustus/
 
 BRAKER:
 

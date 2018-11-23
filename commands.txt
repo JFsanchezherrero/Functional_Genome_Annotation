@@ -28,3 +28,19 @@ tophat2gff3 tophat_output_junctions.bed
 ##############################
 ## 3) Repeat Identification ##
 ##############################
+
+
+
+
+
+
+
+
+
+
+### X) Train SNAP
+#./maker/bin/maker2zff ../$1
+#./snap-2013-11-29/fathom -categorize 1000 genome.ann genome.dna
+#./snap-2013-11-29/fathom -export 1000 -plus uni.ann uni.dna
+#./snap-2013-11-29/forge export.ann export.dna
+#./snap-2013-11-29/hmm-assembler.pl Dsil_R2 . > Dsil_gene_models_R2.hmm

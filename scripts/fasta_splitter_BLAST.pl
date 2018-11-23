@@ -29,11 +29,6 @@ print "\n#######################################################################
 print "\nStarting pipeline for the BLAST search of the given fasta file\n";
 print "\n####################################################################################\n";
 
-## check previous
-print "ATTENTION:\n";
-print "+ Please check that RepBase and NCBI BLAST (RMBLAST version) are installed and accesible\n";
-sleep(2);
-
 my %configuration = %{ myModules::get_config_file( $config_file ) };
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Reading configuration file:\n";
