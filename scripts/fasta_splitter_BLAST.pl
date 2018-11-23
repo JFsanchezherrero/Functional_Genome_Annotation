@@ -4,6 +4,9 @@ use warnings;
 use FindBin;
 use Getopt::Long;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
@@ -54,7 +57,7 @@ print "Chars: $ref_array_count\n";
 my $block = int($ref_array_count/$cpus);
 my $files_ref = myModules::fasta_file_splitter($file,$block,"fasta");
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
-
+print "\n"; &time_log(); print "\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Sending commands:\n";
@@ -95,7 +98,7 @@ close (OUT_SH);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
-print "\n";
+print "\n"; &time_log(); print "\n";
 
 ### Keep folder tidy
 print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
@@ -121,6 +124,8 @@ print "Check for temporal files in tmp folder generated, for final results in co
 print "##################################################\n";
 print "\tBLAST search pipeline finished...\n";
 print "##################################################\n";
+myModules::finish_time_stamp($start_time);
+
 
 sub print_help {
 	print "\n################################################\n";
@@ -128,4 +133,9 @@ sub print_help {
 	print "\n################################################\n";
 	print "This script splits fasta in as many cpus as stated and prints search commands into a file using several queues...\n";
 	print "Multiples DBs could be provided separated\n\n";
+}
+
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
 }

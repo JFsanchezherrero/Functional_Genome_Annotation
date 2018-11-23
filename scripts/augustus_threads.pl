@@ -7,6 +7,9 @@ use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 ### Get Options
 my ($file, $cpus, $config_file, $hints_file, $augustus_species, $help);
 GetOptions( 
@@ -51,6 +54,7 @@ my $block = int($ref_array_count/$cpus);
 my $files_ref = myModules::fasta_file_splitter($file, $block, "fasta");
 my @files = @{$files_ref};
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
+&time_log(); print "\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 my $additional ="";
@@ -80,10 +84,10 @@ for (my $i=0; $i < scalar @files; $i++) {
 
 }
 close (OUT);
-print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
-print "\n";
+print "\n"; &time_log(); print "\n";
+print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 
 ### Keep folder tidy
 print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
@@ -96,6 +100,7 @@ for (my $i=0; $i < scalar @results_files; $i++) {
 }
 for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
 system("mv info_*txt ./tmp");
+&time_log(); print "\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Fixing gene ids generated\n";
@@ -123,11 +128,11 @@ while (<GFF>) {
 close (GFF); close (FIN);
 print "Finishing annotation...\n";
 print "Check for temporal files in tmp folder generated, for final results in $final_file and for putative errors in error.log files...\n";
-
 print "##################################################\n";
 print "\tAugustus annotation pipeline finished...\n";
 print "##################################################\n";
 
+myModules::finish_time_stamp($start_time);
 
 sub print_help {
 	print "\n################################################\n";
@@ -137,4 +142,10 @@ sub print_help {
 	print "This script splits fasta in as many cpus as stated and sends via Grid Engine augustus commands using the queue(s) provided...\n";	
 	print "\n\n";
 }
+
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
+}
+
 

@@ -222,4 +222,32 @@ sub get_config_file {
 	return \%config;	
 }
 
+sub finish_time_stamp {
+
+	my $start_time = $_[0];
+	my $finish_time = time;
+	print "\n\n";
+	print "+++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+	print "++++++++++++++++ ANALYSIS FINISHED ++++++++++++++++\n"; 
+	print "+++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+	print &time_stamp();
+	my $secs = $finish_time - $start_time; 
+	my $hours = int($secs/3600); $secs %= 3600; 	
+	my $mins = int($secs/60); $secs %= 60; 
+	printf (" Whole process took %.2d hours, %.2d minutes, and %.2d seconds\n", $hours, $mins, $secs); 
+}
+
+sub time_stamp { return "[ ".(localtime)." ]"; }
+
+sub time_log {	
+	my $given_step_time = $_[0];
+	my $current_time = time;
+	print &time_stamp."\t";
+	my $secs = $current_time - $given_step_time; 
+	my $hours = int($secs/3600); $secs %= 3600; 
+	my $mins = int($secs/60); $secs %= 60; 
+	printf ("Step took %.2d hours, %.2d minutes, and %.2d seconds\n", $hours, $mins, $secs); 
+	return \$current_time;
+}
+
 1;

@@ -7,6 +7,9 @@ use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 my ($file, $config_file, $nCPUs, $help, @busco_db, $augustus_species);
 GetOptions( 
 	"genome=s" => \$file,
@@ -77,6 +80,8 @@ print "Exit....\n";
 print "##################################################\n";
 print "\tStatistics pipeline finished...\n";
 print "##################################################\n";
+myModules::finish_time_stamp($start_time);
+
 
 sub print_help {
     print "\n######################################################################################\n";
@@ -84,4 +89,8 @@ sub print_help {
     print "######################################################################################\n";
     print "USAGE: perl $0\n\t-genome fasta\n\t-cpu int\n\t-config config_file\n\t-busco_db /path/to/BUSCO_db1\n\t-busco_db /path/to/BUSCO_db2\n\t[-sp augustus_species_model] [-h|--help]\n\n";    
     print "\nThis scripts calls multiple scripts and generates statistics for the given fasta file \n\n";
+}
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
 }

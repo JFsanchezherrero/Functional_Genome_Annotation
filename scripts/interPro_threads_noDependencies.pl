@@ -7,6 +7,9 @@ use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 ### Get Options
 my ($file, $cpus, $config_file, $hints_file, $augustus_species, $help);
 GetOptions( 
@@ -42,13 +45,13 @@ mkdir $dir, 0755; chdir $dir;
 
 my $ref_array_count = myModules::get_size("../".$file);
 my $block = int($ref_array_count/$chunks);
-my $files_ref = myModules::fasta_file_splitter($file,$block,"fasta");
-
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Splitting file into multiple chunks...\n";
 print "Spliting file into $chunks parts of $block bytes each...\n";
 print "Stats for file: $file\n";
 print "Chars: $ref_array_count\n";
+my $files_ref = myModules::fasta_file_splitter($file,$block,"fasta");
+print "\n"; &time_log(); print "\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Sending commands:\n";
@@ -87,7 +90,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 close (OUT);
 ## waiting to finish all 
 myModules::waiting(\@ids2wait);
-print "\n";
+print "\n"; &time_log(); print "\n";
 
 ### Keep folder tidy
 print 
@@ -104,10 +107,11 @@ system("mv info_*txt ./tmp");
 
 ## cat gff3 files generated
 
-
 print "##################################################\n";
 print "\tInterPro annotation pipeline finished...\n";
 print "##################################################\n";
+myModules::finish_time_stamp($start_time);
+
 
 sub print_help {
 	print "\n################################################\n";
@@ -119,6 +123,11 @@ sub print_help {
 	print "\n################################################\n";
 	exit();	
 }
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
+}
+
 
 
 __END__

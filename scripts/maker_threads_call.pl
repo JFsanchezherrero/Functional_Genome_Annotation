@@ -3,6 +3,9 @@ use strict;
 use warnings;
 use Getopt::Long;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
@@ -128,6 +131,9 @@ print "fasta merge command:\n";
 my $command_fasta_merge = $maker_path."/bin/fasta_merge -d ./annotation.maker.output/annotation_master_datastore_index.log";
 system($command_fasta_merge);
 
+myModules::finish_time_stamp($start_time);
+
+
 sub print_help {
 	print "\n################################################\n";
 	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config -file";
@@ -137,6 +143,10 @@ sub print_help {
 	print "################################################\n";
 }
 
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
+}
 
 
 __END__

@@ -3,6 +3,9 @@ use strict;
 use warnings;
 use Getopt::Long;
 
+use POSIX qw(strftime); #my $datestring = strftime "%Y%m%d%H%M", localtime;
+my $step_time; my $start_time = $step_time = time;
+
 use FindBin;
 use lib $FindBin::Bin."/lib";
 require myModules;
@@ -63,6 +66,7 @@ my $call_id = myModules::sending_command($buildDatabase_command);
 push (@ids2wait, $call_id);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
+print "\n"; &time_log(); print "\n";
 
 ## Get repeat library for my data 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -73,7 +77,8 @@ my $repeatLib_command = "$hercules_queue $cpus -cwd -V -N repeatmodeler_Search -
 $call_id = myModules::sending_command($repeatLib_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
-print "\n";
+print "\n"; &time_log(); print "\n";
+
 
 #### RepeatMasker
 chdir ".."; my @files_dir = @{ myModules::read_dir("./RepeatModeler") };
@@ -113,7 +118,7 @@ print "+ Identify and mask repeats for the genome\n";
 $call_id = myModules::sending_command($repeatMasker_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
-print "\n";
+print "\n"; &time_log(); print "\n";
 
 chdir "..";
 #######
@@ -141,13 +146,16 @@ my $rmOutToGFF3_command = "$hercules_queue 1 -cwd -V -o $output_gff3 -N rmOutToG
 $call_id = myModules::sending_command($rmOutToGFF3_command); $ids2wait[0] = $call_id;
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
-print "\n";
+print "\n"; &time_log(); print "\n";
 
 #print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
 
 print "##################################################\n";
 print "Finish Repeat Identification...\n";
 print "##################################################\n";
+
+myModules::finish_time_stamp($start_time);
+
 
 sub print_help {
 	print "\n################################################\n";
@@ -157,4 +165,9 @@ sub print_help {
 	print "ATTENTION:\n";
 	print "+ Please check that RepBase and NCBI BLAST (RMBLAST version) are installed and accesible\n";
 	print "################################################\n";
+}
+
+sub time_log {	
+	my $step_time_tmp = myModules::time_log($step_time); print "\n"; 
+	$step_time = $$step_time_tmp;
 }
