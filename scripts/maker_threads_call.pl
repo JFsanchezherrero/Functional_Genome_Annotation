@@ -98,8 +98,7 @@ myModules::waiting(\@ids2wait);
 print "\n";
 
 ### Keep folder tidy
-print 
-mkdir "tmp", 0755;
+print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
 my $error_log = "error.log";
 #my $final_tmp_file = "concat_tmp_maker_output.gff3";
 for (my $i=0; $i < scalar @results_files; $i++) {

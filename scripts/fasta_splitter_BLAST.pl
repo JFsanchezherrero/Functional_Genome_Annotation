@@ -58,18 +58,23 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Sending commands:\n";
-my (@ids2wait, @results_files, @discard_files, @error_files);
+my (@ids2wait, %results_files, %discard_files, %error_files, %log_files);
 my @files = @{$files_ref};
 my $out_file_header = "blast_search.sh";
 open (OUT_SH, ">$out_file_header");
 #print OUT_SH "#! /bin/bash -x\n#\$ -cwd\n#\$ -V\n";
 for (my $i=0; $i < scalar @files; $i++) {
 	for (my $j=0; $j < scalar @dbs2check; $j++) {
-		my $dbName;
-		my $out = $dbName."_".$files[$i]."-blast.out";
-		my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
+		
+		my $blast_bin = $configuration{"BLAST_folder"}[0].$type;
+		my @name = split("/", $dbs2check[$j]);
+		my $dbName = $name[-1]."_db";
 		my $jobID = $dbName."_".$i;
-		my $blast_call = $hercules_queue." 1 -cwd -V -N $jobID -b y $type -db $dbs2check[$j] -query $files[$i] -out $out -outfmt "."\'\""."6 std qlen slen staxids"."\"\'";
+		my $out = $jobID."_blast.out";
+
+		my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
+		my $blast_call = $hercules_queue." 1 -cwd -V -N $jobID -b y $blast_bin -db $dbs2check[$j] -query $files[$i] -out $out -outfmt "."\'\""."6 std qlen slen staxids"."\"\'";
+		
 		print OUT_SH $blast_call."\n";
 		my $call_id = myModules::sending_command($blast_call);
 		push (@ids2wait, $call_id);
@@ -80,8 +85,10 @@ for (my $i=0; $i < scalar @files; $i++) {
 		my $out_po = $jobID.".po".$call_id;
 		my $out_pe = $jobID.".pe".$call_id;
 		
-		push (@results_files, $out); push (@error_files, $out_e);
-		push (@discard_files, $out_o); push (@discard_files, $out_po);	push (@discard_files, $out_pe);	
+		push (@{ $results_files{$dbName} }, $out); 
+		push (@{ $error_files{$dbName} }, $out_e);
+		push (@{ $log_files{$dbName} }, $out_o); 
+		push (@{ $discard_files{$dbName} }, $out_po);	push (@{ $discard_files{$dbName} }, $out_pe);	
 	}
 }
 close (OUT_SH);
@@ -91,20 +98,25 @@ myModules::waiting(\@ids2wait);
 print "\n";
 
 ### Keep folder tidy
-print 
-mkdir "tmp", 0755;
-my $error_log = "error.log";
-my $final_tmp_file = "concat_BLAST_results.txt";
-for (my $i=0; $i < scalar @results_files; $i++) {
-	system("cat $results_files[$i] >> $final_tmp_file");	
-	system("mv $results_files[$i] ./tmp"); system("mv $files[$i] ./tmp");
-	system("cat $error_files[$i] >> $error_log"); system("mv $error_files[$i] ./tmp"); 
+print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
+
+for (my $db=0; $db < scalar @dbs2check; $db++) {
+	my @name = split("/", $dbs2check[$db]);
+	my $dbName = $name[-1]."_db";
+	my $final_tmp_file = "concat_BLAST_".$dbName."_results.txt";
+	my $error_log = $dbName."_error.log"; my $log = $dbName.".log";
+	
+	for (my $i=0; $i < scalar @{ $results_files{$dbName} }; $i++) {
+		system("cat $results_files{$dbName}[$i] >> $final_tmp_file"); system("mv $results_files{$dbName}[$i] ./tmp");
+		system("cat $error_files{$dbName}[$i] >> $error_log"); system("mv $error_files{$dbName}[$i] ./tmp"); 
+		system("cat $log_files{$dbName}[$i] >> $log"); system("mv $log_files{$dbName}[$i] ./tmp"); 
+	}
+	for (my $i=0; $i < scalar @{ $discard_files{$dbName} }; $i++) { system("rm $discard_files{$dbName}[$i]"); }
 }
-for (my $i=0; $i < scalar @discard_files; $i++) { system("rm $discard_files[$i]"); }
-system("mv info_*txt ./tmp");
+system("mv info_*txt ./tmp"); for (my $i=0; $i < scalar @files; $i++) { system("mv $files[$i] ./tmp"); }
 
 print "Finishing BLAST search...\n";
-print "Check for temporal files in tmp folder generated, for final results in $final_tmp_file and for putative errors in error.log files...\n";
+print "Check for temporal files in tmp folder generated, for final results in concat_BLAST_*_file(s) generated and for putative errors in error.log files...\n";
 
 print "##################################################\n";
 print "\tBLAST search pipeline finished...\n";

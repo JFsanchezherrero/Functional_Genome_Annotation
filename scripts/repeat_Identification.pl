@@ -143,6 +143,8 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 myModules::waiting(\@ids2wait); ## waiting to finish all 
 print "\n";
 
+#print "+ Cleaning folder and discarding tmp files\n"; mkdir "tmp", 0755;
+
 print "##################################################\n";
 print "Finish Repeat Identification...\n";
 print "##################################################\n";

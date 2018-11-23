@@ -42,6 +42,7 @@ if ($ARGV[0]) {
 	print "RepeatModeler (/path/to/RepeatModeler_folder/):\t"; my $RepeatModeler = <STDIN>; chomp $RepeatModeler; push ( @{ $configuration{"RepeatModeler"} } , $RepeatModeler );
 	print "contig_stats (/path/to/perl_script/contig_stats.pl):\t"; my $contig_stats = <STDIN>; chomp $contig_stats; push ( @{ $configuration{"contig_stats"} } , $contig_stats );
 	print "rmOutToGFF3 (/path/to/perl_script/rmOutToGFF3.pl):\t"; my $rmOutToGFF3 = <STDIN>; chomp $rmOutToGFF3; push ( @{ $configuration{"rmOutToGFF3"} } , $rmOutToGFF3 );
+	print "BLAST_folder (/path/to/blast_bin_folder/):\t"; my $BLAST = <STDIN>; chomp $BLAST; push ( @{ $configuration{"BLAST"} } , $BLAST );
 	
 	print "GRID_QUEUE (qsub -q xxx -pe yyyy):\t"; my $GRID_QUEUE = <STDIN>; chomp $GRID_QUEUE; push ( @{ $configuration{"GRID_QUEUE"} } , $GRID_QUEUE );
 	print "\nAnythin else?\n";
@@ -57,10 +58,8 @@ if ($ARGV[0]) {
 #print Dumper \%configuration;
 
 foreach my $keys (keys %configuration) {
-	next if $keys eq "BUSCO"; next if $keys eq "GRID_QUEUE";
-	next if $keys eq "contig_stats"; next if $keys eq "INTERPRO"; 
-	next if $keys eq "rmOutToGFF3";	
-	
+	next if $keys eq "BUSCO"; next if $keys eq "GRID_QUEUE"; next if $keys eq "contig_stats"; 
+	next if $keys eq "INTERPRO";  next if $keys eq "rmOutToGFF3";	
 	my @array_files = @{ $configuration{$keys} };
 		for (my $i=0; $i < scalar @array_files; $i++) {
 			next if ($array_files[$i] eq ".");
