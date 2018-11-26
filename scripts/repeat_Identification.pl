@@ -139,7 +139,7 @@ system("cat $tbl_file");
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Convert GFF file generated into GFF3 compatible file\n";
-my $rmOutToGFF3 = $configuration{"rmOutToGFF3"}[0];
+my $rmOutToGFF3 = $configuration{"RepeatMasker"}[0]."/util/rmOutToGFF3.pl";
 my $output_gff3 = $output_file.".gff3";
 my $rmOutToGFF3_command = "$hercules_queue 1 -cwd -V -o $output_gff3 -N rmOutToGFF3 -b y perl $rmOutToGFF3 $output_file";
 #print "Command: $rmOutToGFF3_command\n";
