@@ -15,8 +15,16 @@ source environment.sh ## load environment variables
 
 perl ./Functional_Genome_Annotation/scripts/calling_Assembly-STATS-BUSCO.pl -genome genome.fasta -cpu $CPUS -config configuration_file.txt -busco_db /path/to/BUSCO_db1 [-busco_db /path/to/BUSCO_db2] [-sp augustus_species]
 
+##############################
+## 2) Repeat Identification ##
+##############################
+
+perl ./Functional_Genome_Annotation/scripts/repeat_Identification.pl -file genome.fasta -cpu $CPUs -config configuration_file.txt
+
+### Get Evidences and Annotate
+
 ################################
-## 2) Get Tophat junctions	####
+## 4) Get Tophat junctions	####
 ################################
 
 tophat –p $CPUS genome.fasta RNAseq-reads_R1.fastq RNAseq-reads_R2.fastq
@@ -25,9 +33,36 @@ tophat –p $CPUS genome.fasta RNAseq-reads_R1.fastq RNAseq-reads_R2.fastq
 ## convert into gff3 format file using tophat2gff3 (under maker/bin/)
 tophat2gff3 tophat_output_junctions.bed
 
-##############################
-## 3) Repeat Identification ##
-##############################
+####################
+## 5) BRAKER	####
+####################
+## 
+perl ./braker.pl --genome=genome.fasta --bam=filtered.sort.bam --GENEMARK_PATH=./gmes_petap/ --BAMTOOLS_PATH=./bamtools_path/ --SAMTOOLS_PATH=./samtools --AUGUSTUS_CONFIG_PATH=./augustus-3.1/bin/ --UTR on --species=name --cores $CPUS --gff3 --workingdir=dirname
+
+## Output: Gene predictions by GeneMark, GeneMark trained, Augustus trained
+
+#####################
+## 6) Train SNAP   ##
+#####################
+## Use maker to train SNAP
+
+- Run maker: Step 7) but set est2genome=1 in control files
+- Once maker annotation gff file is generated:
+- Train SNAP
+
+./maker/bin/maker2zff maker.file.gff
+./snap/fathom -categorize 1000 genome.ann genome.dna
+./snap/fathom -export 1000 -plus uni.ann uni.dna
+./snap/forge export.ann export.dna
+./snap/hmm-assembler.pl species_RoundX . > species_gene_models_RoundX.hmm
+
+##################
+## 7) MAKER		##
+##################
+
+## generate control files
+## set est2genome=0
+## set snaphmm=species_gene_models_RoundX.hmm
 
 
 
@@ -36,11 +71,3 @@ tophat2gff3 tophat_output_junctions.bed
 
 
 
-
-
-### X) Train SNAP
-#./maker/bin/maker2zff ../$1
-#./snap-2013-11-29/fathom -categorize 1000 genome.ann genome.dna
-#./snap-2013-11-29/fathom -export 1000 -plus uni.ann uni.dna
-#./snap-2013-11-29/forge export.ann export.dna
-#./snap-2013-11-29/hmm-assembler.pl Dsil_R2 . > Dsil_gene_models_R2.hmm

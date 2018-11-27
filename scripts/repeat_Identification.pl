@@ -159,7 +159,7 @@ myModules::finish_time_stamp($start_time);
 
 sub print_help {
 	print "\n################################################\n";
-	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config -file";
+	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config file";
 	print "\n################################################\n";
 	print "This script generates a database and sends repeat identification search using RepeatModeler and RepeatMasker\n\n\n";
 	print "ATTENTION:\n";

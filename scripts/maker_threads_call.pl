@@ -11,12 +11,13 @@ use lib $FindBin::Bin."/lib";
 require myModules;
 
 ### Get Options
-my ($file, $cpus, $config_file, $hints_file, $augustus_species, $help);
+my ($file, $cpus, $config_file, $help, $maker_ctl_files);
 GetOptions( 
 	"file=s" => \$file,
 	"cpu=i" => \$cpus,
 	"config=s" => \$config_file,
 	"h|help" => \$help,
+	"maker_control_file=s" => \$maker_ctl_files
 );
 if (!$file || !$config_file || !$cpus) { &print_help(); exit();}
 if ($help) {&print_help(); exit();}
@@ -42,6 +43,9 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "Make dir and change to ./maker_annotation\n";
 my $dir = "maker_annotation";
 mkdir $dir, 0755; chdir $dir;
+
+my $files2cp = $maker_ctl_files."/maker_*";
+system ("cp $files2cp .");
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Splitting file into multiple chunks...\n";
@@ -69,22 +73,17 @@ for (my $i=0; $i < scalar @files; $i++) {
 	my $name = "maker_".$i;
 	$hercules_queue .= " 2 -N $name -cwd -V -b y ";
 	print "Sending command for: $files[$i]\n";
-
-	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-	print "Sending command for: $files[$i]\n";
 	my $command = $hercules_queue." ".$maker_path."/bin/maker -g ".$files[$i]." -b annotation";
 	print OUT $command."\n";	
-
+	
 	my $call_id = myModules::sending_command($command);
 	push (@ids2wait, $call_id);
 
 	## only for the first command	
 	if ($i == 0) { 
-		print OUT "sleep 100\n";
-		sleep(100);  ## send the first command and let it set folders and databases	
+		print OUT "sleep 100\n"; sleep(100);  ## send the first command and let it set folders and databases	
 	} else { 
-        print OUT "sleep 40\n";
-		sleep(10);
+        print OUT "sleep 40\n"; sleep(40);
 	}
 	
 	## get files generated
@@ -136,10 +135,10 @@ myModules::finish_time_stamp($start_time);
 
 sub print_help {
 	print "\n################################################\n";
-	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config -file";
+	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config file -maker_control_file path";
 	print "\n################################################\n";
 	print "This script splits fasta in as many chunks (cpu/2) as stated and sends Maker Annotation Pipeline using several queues...\n\n";
-	print "Maker control files must be set in the folder where the command is sent. Use 2 CPUs.\n\n\n";
+	print "Maker control files must be set in the folder specified at maker_control_fikes option. Set to use 2 CPUs.\n\n\n";
 	print "################################################\n";
 }
 

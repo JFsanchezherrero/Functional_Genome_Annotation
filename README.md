@@ -55,7 +55,12 @@ Map RNA seq reads using Tophat and with the output generated, junctions bed file
 - Annotation
 	
 	https://doi.org/10.1371/journal.pone.0050609
+	
 	https://academic.oup.com/bioinformatics/article/24/5/637/202844
+	
+	https://bmcbioinformatics.biomedcentral.com/articles/10.1186/1471-2105-12-491
+	
+	https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4286374/
 		
 
 
@@ -72,7 +77,9 @@ http://www.repeatmasker.org/RMDownload.html
 RepeatModeler: 
 http://www.repeatmasker.org/RepeatModeler/
 
-MAKER:
+MAKER: 
+
+
 
 AUGUSTUS: http://bioinf.uni-greifswald.de/augustus/
 
