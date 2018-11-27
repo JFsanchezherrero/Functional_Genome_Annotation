@@ -17,9 +17,9 @@ GetOptions(
 	"cpu=i" => \$cpus,
 	"config=s" => \$config_file,
 	"h|help" => \$help,
-	"maker_control_file=s" => \$maker_ctl_files
+	"maker_ctl_file=s" => \$maker_ctl_files
 );
-if (!$file || !$config_file || !$cpus) { &print_help(); exit();}
+if (!$file || !$config_file || !$maker_ctl_files || !$cpus) { &print_help(); exit();}
 if ($help) {&print_help(); exit();}
 
 if ($help) {&print_help(); exit();}
@@ -44,7 +44,7 @@ print "Make dir and change to ./maker_annotation\n";
 my $dir = "maker_annotation";
 mkdir $dir, 0755; chdir $dir;
 
-my $files2cp = $maker_ctl_files."/maker_*";
+my $files2cp = $maker_ctl_files."/maker_*ctl";
 system ("cp $files2cp .");
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
@@ -135,10 +135,10 @@ myModules::finish_time_stamp($start_time);
 
 sub print_help {
 	print "\n################################################\n";
-	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config file -maker_control_file path";
+	print "Usage:\nperl $0\n\t-file fasta_file\n\t-cpu int\n\t-config file -maker_ctl_file path";
 	print "\n################################################\n";
 	print "This script splits fasta in as many chunks (cpu/2) as stated and sends Maker Annotation Pipeline using several queues...\n\n";
-	print "Maker control files must be set in the folder specified at maker_control_fikes option. Set to use 2 CPUs.\n\n\n";
+	print "Maker control files must be set in the folder specified at maker_ctl_fikes option. Set to use 2 CPUs.\n\n\n";
 	print "################################################\n";
 }
 
