@@ -80,9 +80,24 @@ maker -CTL
 
 perl ./Functional_Genome_Annotation/scripts/maker_threads_call.pl -file genome.fasta -cpu $CPUs -config configuration_file.txt -name NAME
 
+##########################
+## 8) Get AED stats		##
+##########################
 
+sh ./Functional_Genome_Annotation/scripts/get_mean_eAED.sh maker.all.proteins.fasta outputfile
 
+##########################
+## 9) Plot AED stats	##
+##########################
+Edit the R script ./Functional_Genome_Annotation/scripts/plot_AED_statistics.R and plot as many as files generated in the previous step
 
+##################################
+## 10) Functional Annotation	##
+##################################
 
+## Intepro
+perl ./Functional_Genome_Annotation/scripts/interPro_threads.pl -file genome.fasta -cpu $CPUs -config configuration_file.txt 
 
+## BLAST
+perl ./Functional_Genome_Annotation/scripts/fasta_splitter_BLAST.pl -file fasta_file -db DB_index_name [-db DB_index_name2] -cpu $cpus -type [blastp|blastn|tblastn|tblastx] -config config_file
 

@@ -43,7 +43,7 @@ print "Make dir and change to ./interpro_annotation\n";
 my $dir = "interpro_annotation";
 mkdir $dir, 0755; chdir $dir;
 
-my $ref_array_count = myModules::get_size("../".$file);
+my $ref_array_count = myModules::get_size($file);
 my $block = int($ref_array_count/$chunks);
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Splitting file into multiple chunks...\n";

@@ -49,6 +49,20 @@ set CPU=2
 and call maker using the script provided it here to avoid MPI problems in your system.
 
 
+## 8) Get AED statistics for proteins annotated
+
+For each set, trained or not trained, retrieve AED statistics into individual files
+
+## 9) Plot AED statistics
+
+Plot cumulative frequency of AED statistics to check improvement of the annotation
+
+## 10) Functional annotation
+
+Functionally annotate using InterPRO and BLAST proteins generated
+
+
+
 
 
 # Bibliography & Sources:

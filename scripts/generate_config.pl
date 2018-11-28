@@ -77,6 +77,8 @@ print OUT "MAKER\t".$configuration{"MAKER"}[0]."\n";
 print OUT "RepeatMasker\t".$configuration{"RepeatMasker"}[0]."\n";
 print OUT "RepeatModeler\t".$configuration{"RepeatModeler"}[0]."\n";
 print OUT "contig_stats\t".$configuration{"contig_stats"}[0]."\n";
+print OUT "BLAST_folder\t".$configuration{"BLAST_folder"}[0]."\n";
+
 my @array = @{ $configuration{"GRID_QUEUE"} }; 
 for (my $i=0; $i < scalar @array; $i++) {
 	print OUT "GRID_QUEUE\t".$array[$i]."\n";
