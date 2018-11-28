@@ -16,14 +16,14 @@ get_Freq <- function(table2check) {
 }
 
 ## file1
-file2check <- "R_scripts/eAED_files/eAED_statistics_contigs_R1_values.txt"
+file2check <- "/path/to/file1"
 AED1 <- read.table(file2check)
 mean_AED1 = mean(AED1$V1)
 median_AED1 = median(AED1$V1)
 cumfreq_Ret1 <- get_Freq(AED1)
 
 ## file2
-file2check2 <- "R_scripts/eAED_files/first_eAED_value.txt"
+file2check2 <- "/path/to/file2"
 AED2 <- read.table(file2check2)
 mean_AED2 = mean(AED2$V1)
 median_AED2 = median(AED2$V1)

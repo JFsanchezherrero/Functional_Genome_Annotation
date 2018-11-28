@@ -81,9 +81,14 @@ MAKER:
 
 
 
-AUGUSTUS: http://bioinf.uni-greifswald.de/augustus/
+AUGUSTUS:
+
+http://bioinf.uni-greifswald.de/augustus/
+
+https://github.com/Gaius-Augustus/Augustus
 
 BRAKER:
+https://github.com/Gaius-Augustus/BRAKER
 
 BLAST:
 

@@ -46,7 +46,7 @@ perl ./braker.pl --genome=genome.fasta --bam=filtered.sort.bam --GENEMARK_PATH=.
 #####################
 ## Use maker to train SNAP
 
-- Run maker: Step 7) but set est2genome=1 in control files
+- Run maker: Step 7) but set est2genome=1 and/or protein2genome=1 in control files
 - Once maker annotation gff file is generated:
 - Train SNAP
 
