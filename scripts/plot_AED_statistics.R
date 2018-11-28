@@ -8,7 +8,7 @@ get_Freq <- function(table2check) {
   breaks = seq(0, 1, by=0.02) 
   AED_table <- table(table2check)
   AED_frame <- as.data.frame(AED_table)
-  AED.cut = cut(table2check$V1, breaks, right=FALSE) 
+  AED.cut = cut(table2check$V2, breaks, right=FALSE) 
   AED.freq = table(AED.cut)
   cumfreq = c(0, cumsum(AED.freq)/sum(AED.freq)) 
   
@@ -18,22 +18,22 @@ get_Freq <- function(table2check) {
 ## file1
 file2check <- "/path/to/file1"
 AED1 <- read.table(file2check)
-mean_AED1 = mean(AED1$V1)
-median_AED1 = median(AED1$V1)
+mean_AED1 = mean(AED1$V2)
+median_AED1 = median(AED1$V2)
 cumfreq_Ret1 <- get_Freq(AED1)
 
 ## file2
 file2check2 <- "/path/to/file2"
 AED2 <- read.table(file2check2)
-mean_AED2 = mean(AED2$V1)
-median_AED2 = median(AED2$V1)
+mean_AED2 = mean(AED2$V2)
+median_AED2 = median(AED2$V2)
 cumfreq_Ret2 <- get_Freq(AED2)
 
 ## file3
 #file2check3 <- "/path/to/file3"
 #AED3 <- read.table(file2check3)
-#mean_AED3 = mean(AED3$V1)
-#median_AED3 = median(AED3$V1)
+#mean_AED3 = mean(AED3$V2)
+#median_AED3 = median(AED3$V2)
 #cumfreq_Ret3 <- get_Freq(AED3)
 
 ## file_n
