@@ -20,7 +20,34 @@ Generate a de novo search and based on RepBase and DFam for the repeat identific
 
 Map RNA seq reads using Tophat and with the output generated, junctions bed file (others: accepted hits mapping bam file; insertions, and deletions bed file) generate information for later annotation. Convert junctions bed into gff3 format file using tophat2gff3 (under maker/bin/)
 
-## 4) Generate
+## 4) Generate Ab initio prediction
+
+Using AUGUSTUS generate an ab initio prediction of the genome provided.
+
+## 5) BRAKER
+
+Generate a pre-annotation using BRAKER and train genemark and AUGUSTUS
+
+## 6) SNAP
+
+Train SNAP using maker: set est2genome=1 and/or protein2genome=1 in control files and once maker annotation gff file is generated train SNAP for later re-annotation.
+
+Repeat step up to 3 times to avoid overtraining.
+
+## 7) MAKER
+
+Generate maker control files (maker -CTL)
+
+set est2genome=0/protein2genome=0
+set snaphmm=output_name_file.hmm
+set rmlib=repeats.lib (Step 2)
+set augustus_species option
+set pred_gff = ab initio gff (Step 5)
+include proteins, mRNA, other proteins, junctions.gff file (Step 4)
+set CPU=2
+
+and call maker using the script provided it here to avoid MPI problems in your system.
+
 
 
 
@@ -78,11 +105,16 @@ RepeatModeler:
 http://www.repeatmasker.org/RepeatModeler/
 
 MAKER: 
+http://www.yandell-lab.org/software/maker.html
 
+http://gmod.org/wiki/MAKER_Tutorial
+
+http://weatherby.genetics.utah.edu/MAKER/wiki/index.php/The_MAKER_control_files_explained
+
+http://weatherby.genetics.utah.edu/MAKER/wiki/index.php/Main_Page
 
 
 AUGUSTUS:
-
 http://bioinf.uni-greifswald.de/augustus/
 
 https://github.com/Gaius-Augustus/Augustus
@@ -90,7 +122,7 @@ https://github.com/Gaius-Augustus/Augustus
 BRAKER:
 https://github.com/Gaius-Augustus/BRAKER
 
-BLAST:
+
 
 
 ## Others

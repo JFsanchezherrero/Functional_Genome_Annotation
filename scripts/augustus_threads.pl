@@ -69,7 +69,7 @@ my (@ids2wait, @results_files, @discard_files, @error_files);
 for (my $i=0; $i < scalar @files; $i++) {
 	my $augustus_path = $configuration{"AUGUSTUS"}[0]."bin/augustus";
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-	my $augustus_call = "$hercules_queue 1 -cwd -V -N augustus_$i -b y $augustus_path --gff3=on".$additional." --species=$augustus_species $files[$i]";
+	my $augustus_call = "$hercules_queue 1 -cwd -V -N augustus_$i -b y $augustus_path --alternatives-from-evidence=true --UTR=on --gff3=on".$additional." --species=$augustus_species $files[$i]";
 	print OUT $augustus_call."\n";
 	my $call_id = myModules::sending_command($augustus_call);
 	push (@ids2wait, $call_id);

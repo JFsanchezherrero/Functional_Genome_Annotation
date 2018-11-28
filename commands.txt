@@ -24,7 +24,7 @@ perl ./Functional_Genome_Annotation/scripts/repeat_Identification.pl -file genom
 ### Get Evidences and Annotate
 
 ################################
-## 4) Get Tophat junctions	####
+## 3) Get Tophat junctions	####
 ################################
 
 tophat –p $CPUS genome.fasta RNAseq-reads_R1.fastq RNAseq-reads_R2.fastq
@@ -32,6 +32,13 @@ tophat –p $CPUS genome.fasta RNAseq-reads_R1.fastq RNAseq-reads_R2.fastq
 
 ## convert into gff3 format file using tophat2gff3 (under maker/bin/)
 tophat2gff3 tophat_output_junctions.bed
+
+####################################
+## 4) Ab Initio gene prediction	####
+####################################
+
+## run ab initio prediction
+perl ./Functional_Genome_Annotation/scripts/augustus_threads.pl -file genome.fasta -cpu $CPUs -config configuration_file.txt [-hints hints_file -sp augustus_species]
 
 ####################
 ## 5) BRAKER	####
@@ -46,24 +53,32 @@ perl ./braker.pl --genome=genome.fasta --bam=filtered.sort.bam --GENEMARK_PATH=.
 #####################
 ## Use maker to train SNAP
 
-- Run maker: Step 7) but set est2genome=1 and/or protein2genome=1 in control files
+- Run maker: (Step 7) set est2genome=1 and/or protein2genome=1 in control files
 - Once maker annotation gff file is generated:
 - Train SNAP
 
-./maker/bin/maker2zff maker.file.gff
-./snap/fathom -categorize 1000 genome.ann genome.dna
-./snap/fathom -export 1000 -plus uni.ann uni.dna
-./snap/forge export.ann export.dna
-./snap/hmm-assembler.pl species_RoundX . > species_gene_models_RoundX.hmm
+./Functional_Genome_Annotation/scripts/SNAP_train.sh maker.gff output_tag output_name_file.hmm
+
+Repeat step up to 3 times.
 
 ##################
 ## 7) MAKER		##
 ##################
 
 ## generate control files
-## set est2genome=0
-## set snaphmm=species_gene_models_RoundX.hmm
+maker -CTL
 
+## set est2genome=0/protein2genome=0
+## set rmlib=repeats.lib (Step 2)
+## set augustus_species option
+## set pred_gff = ab initio gff (Step 4)
+## include proteins, mRNA, other proteins, junctions.gff file (Step 3)
+## set CPU=2
+## set genemark hmm models if trained (Step 5)
+## set genemark augustus models if trained (Step 5)
+## set snaphmm=output_name_file.hmm (Step 6)
+
+perl ./Functional_Genome_Annotation/scripts/maker_threads_call.pl -file genome.fasta -cpu $CPUs -config configuration_file.txt -name NAME
 
 
 
