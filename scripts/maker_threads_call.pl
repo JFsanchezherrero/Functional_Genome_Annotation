@@ -11,11 +11,12 @@ use lib $FindBin::Bin."/lib";
 require myModules;
 
 ### Get Options
-my ($file, $cpus, $config_file, $help, $maker_ctl_files);
+my ($file, $cpus, $name, $config_file, $help, $maker_ctl_files);
 GetOptions( 
 	"file=s" => \$file,
 	"cpu=i" => \$cpus,
 	"config=s" => \$config_file,
+	"name=s" => \$name,
 	"h|help" => \$help,
 	"maker_ctl_file=s" => \$maker_ctl_files
 );
@@ -40,8 +41,8 @@ foreach my $keys (sort keys %configuration) {
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 
 # read config file
-print "Make dir and change to ./maker_annotation\n";
-my $dir = "maker_annotation";
+my $dir = "maker_annotation_".$name;
+print "Make dir and change to $dir\n";
 mkdir $dir, 0755; chdir $dir;
 
 my $files2cp = $maker_ctl_files."/maker_*ctl";
@@ -59,7 +60,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "+ Sending commands:\n";
-my $file_OUT = "maker_threads_commands_sent.txt";
+my $file_OUT = "maker_".$name."_commands_sent.txt";
 print "Printing commands into $file_OUT\n";
 
 my $maker_path = $configuration{"MAKER"}[0];
@@ -115,7 +116,7 @@ print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 ## -dsindex and finish
 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 print "DSINDEX command:\n";
-my $command = $maker_path."/bin/maker -b annotation -g $file -dsindex";
+my $command = $maker_path."/maker -b annotation -g $file -dsindex";
 system($command);
 
 ##merge
