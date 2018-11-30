@@ -71,7 +71,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 	print "Sending command for: $files[$i]\n";
 	my $interpro = $configuration{"INTERPRO"}[0];
 	
-	my $command = $hercules_queue." $interpro -cpu 4 -i ".$files[$i]." -appl TIGRFAM,SFLD,SUPERFAMILY,Gene3D,Hamap,Coils,ProSiteProfiles,SMART,PRINTS,ProSitePatterns,Pfam,ProDom,MobiDBLite,PIRSF -b $name -pa -dp -goterms";
+	my $command = $hercules_queue." $interpro -i ".$files[$i]." -appl TIGRFAM,SFLD,SUPERFAMILY,Gene3D,Hamap,Coils,ProSiteProfiles,SMART,PRINTS,ProSitePatterns,Pfam,ProDom,MobiDBLite,PIRSF -b $name -pa -dp -goterms";
 	print OUT $command."\n";
 	my $call_id = myModules::sending_command($command);
 	push (@ids2wait, $call_id);
