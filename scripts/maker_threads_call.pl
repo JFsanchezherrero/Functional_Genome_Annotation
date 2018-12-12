@@ -82,9 +82,9 @@ for (my $i=0; $i < scalar @files; $i++) {
 
 	## only for the first command	
 	if ($i == 0) { 
-		print OUT "sleep 100\n"; sleep(100);  ## send the first command and let it set folders and databases	
+		print OUT "sleep 1200\n"; sleep(1200);  ## send the first command and let it set folders and databases	
 	} else { 
-        print OUT "sleep 40\n"; sleep(40);
+        print OUT "sleep 30\n"; sleep(30);
 	}
 	
 	## get files generated

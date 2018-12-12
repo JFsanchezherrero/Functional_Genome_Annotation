@@ -1,10 +1,10 @@
-BUSCO	.
+BUSCO	/users/jfsanchez/JFSH_software/BUSCOs/BUSCO-version/BUSCO_git/busco/scripts/run_BUSCO.py
+contig_stats	/users/jfsanchez/jfsh_scripts/contig_stats.pl
 AUGUSTUS	/users/molevol/software/structural_annotation/ANNOTATION/augustus-3.1/
 INTERPRO	/soft/interproscan-5.31-70.0/interproscan.sh
 MAKER	/users/molevol/software/structural_annotation/ANNOTATION/maker/bin/
 RepeatMasker	/users/molevol/software/structural_annotation/RepeatSearch/RepeatMasker/RepeatMasker/
 RepeatModeler	/users/molevol/software/structural_annotation/RepeatSearch/RepeatModeler-open-1.0.11/
 BLAST_folder	/soft/ncbi-blast-2.4.0/bin/
-contig_stats	.
 GRID_QUEUE	qsub -cwd -V -q h0809.q -pe ompi24
-GRID_QUEUE	qsub -cwd -V -q h0107.q -pe ompi8
+

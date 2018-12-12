@@ -71,7 +71,7 @@ for (my $i=0; $i < scalar @files; $i++) {
 		my $out = $jobID."_blast.out";
 
 		my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
-		my $blast_call = $hercules_queue." 1 -cwd -V -N $jobID -b y $blast_bin -db $dbs2check[$j] -query $files[$i] -out $out -outfmt "."\'\""."6 std qlen slen staxids"."\"\'";
+		my $blast_call = $hercules_queue." 1 -cwd -V -N $jobID -b y $blast_bin -db $dbs2check[$j] -query $files[$i] -evalue 1e-5 -out $out -outfmt "."\'\""."6 std qlen slen staxids"."\"\'";
 		
 		print OUT_SH $blast_call."\n";
 		my $call_id = myModules::sending_command($blast_call);
