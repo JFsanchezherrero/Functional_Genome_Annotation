@@ -72,7 +72,15 @@ for (my $i=0; $i < scalar @files; $i++) {
 	
 	my $hercules_queue = $configuration{"GRID_QUEUE"}[rand @{ $configuration{"GRID_QUEUE"} }]; ## get random queue
 	my $name = "maker_".$i;
-	$hercules_queue .= " 2 -N $name -cwd -V -b y ";
+	#$hercules_queue .= " 2 -N $name -cwd -V -b y ";
+	
+	#if ($i == 0) {
+        #$hercules_queue .= " 2 -N $name -cwd -V -b y ";
+	#} else {
+        #$hercules_queue .= " 2 -N $name -hold_jid 169944 -cwd -V -b y ";
+	#}
+	##169741
+
 	print "Sending command for: $files[$i]\n";
 	my $command = $hercules_queue." ".$maker_path."maker -g ".$files[$i]." -b annotation";
 	print OUT $command."\n";	
@@ -82,9 +90,9 @@ for (my $i=0; $i < scalar @files; $i++) {
 
 	## only for the first command	
 	if ($i == 0) { 
-		print OUT "sleep 1200\n"; sleep(1200);  ## send the first command and let it set folders and databases	
+		print OUT "sleep 3600\n"; sleep(3600);  ## send the first command and let it set folders and databases	
 	} else { 
-        print OUT "sleep 30\n"; sleep(30);
+        	print OUT "sleep 30\n"; sleep(30);
 	}
 	
 	## get files generated
